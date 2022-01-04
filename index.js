@@ -35,13 +35,13 @@ input.addEventListener('keyup', (event) => {
 //     observer.next('World!');
 //     observer.complete();
 // });
+
+// first stream
 // const observer = {
 //     next: value => console.log('first stream - ', value),
 //     error: error => console.error('first stream - ', error),
 //     complete: () => console.log('first stream - completed')
 // };
-
-// first stream
 // observable.subscribe(observer);
 
 // second stream
@@ -87,7 +87,7 @@ const A = rxjs.interval(1000).pipe(
     }),
     // rxjs.operators.tap(value => console.log(value))
 );
-// a.subscribe();
+// A.subscribe();
 // -- 0 -- 1 -- 2 -- 3 -- 4 -- 5 -- 6 -- 7 -- 8 -- 9 --|-->
 const b = rxjs.interval(200).pipe(
     rxjs.operators.take(10),
@@ -95,7 +95,8 @@ const b = rxjs.interval(200).pipe(
 );
 // b.subscribe();
 
-// pipe() - это конвейерный оператор. Он позволит создавать лучшие решения с более читаемым кодом и зачастую с меньшим количеством кода.
+// pipe() - это конвейерный оператор. Он позволит создавать лучшие решения с более читаемым кодом
+//  и зачастую с меньшим количеством кода.
 
 // -------- of --------------------------------------
 // принимает на вход любое количество аргументов и возвращает готовый экземпляр Observable.
@@ -158,7 +159,9 @@ const b = rxjs.interval(200).pipe(
 // которая знает, как присоединить новое значение источника к накоплению из прошлого.
 // at the entrance: -- 0 -- 1 -- 2 -- 3 -- 4 -- 5 -- 6 -- 7 -- 8 -- 9 --|-->
 // at the exit: -- 45 --|-->
-// b.pipe(rxjs.operators.reduce((ass, curr) => ass + curr, 0)).subscribe(value => console.log(value));
+// b.pipe(
+//     rxjs.operators.reduce((ass, curr) => ass + curr, 0)
+// ).subscribe(value => console.log(value));
 
 // ------- scan --------------------------------------------------------------------
 // Полезно для инкапсуляции и управления состоянием.
@@ -169,9 +172,16 @@ const b = rxjs.interval(200).pipe(
 // например, сумму с течением времени
 // at the entrance: -- 0 -- 1 -- 2 -- 3 -- 4  -- 5  -- 6  -- 7  -- 8  -- 9  --|-->
 // at the exit:     -- 0 -- 1 -- 3 -- 6 -- 10 -- 15 -- 21 -- 28 -- 36 -- 45 --|-->
-// b.pipe(rxjs.operators.scan((ass, curr) => ass + curr, 0)).subscribe(value => console.log(value));
+
+// b.pipe(
+//     rxjs.operators.scan((ass, curr) => ass + curr, 0)
+// ).subscribe(value => console.log(value));
+
 // RxJS v6+
-// b.pipe(rxjs.operators.scan((ass, curr) => [...ass, curr], [])).subscribe(value => console.log(value));
+
+// b.pipe(
+//     rxjs.operators.scan((ass, curr) => [...ass, curr], [])
+// ).subscribe(value => console.log(value));
 
 // ------- buffer ------------------------------------------------------------
 // собираем клики в списки
@@ -247,7 +257,9 @@ const b = rxjs.interval(200).pipe(
 // избавит от дублирующих эначений
 // at the exit:  -- a -- b -- c -- b -- a --|-->
 
-// const observable = rxjs.of('a', 'a', 'b', 'b', 'c', 'c', 'b', 'a').pipe(rxjs.operators.distinctUntilChanged());
+// const observable = rxjs.of('a', 'a', 'b', 'b', 'c', 'c', 'b', 'a').pipe(
+//     rxjs.operators.distinctUntilChanged()
+// );
 // observable.subscribe(value => console.log(value));
 
 // -------- timer -----------------------------------------------------------------------
@@ -408,14 +420,16 @@ const dictionary = {
 // b.pipe(rxjs.combineLatestWith(A)).subscribe(x => console.log(x));
 
 // rxjs.combineLatest(dictionary).subscribe(x => console.log(x)); // Новый тип аргументов
+
 // ------- zip, zipWith, zipAll --------------------------------------------------------
-// объединяет две или более последовательности соответствующих значений в виде кортежа (пары в случае двух входных потоков).
+// объединяет две или более последовательности соответствующих значений в виде кортежа 
+// (пары в случае двух входных потоков).
 // Он ожидает получения соответствующего значения из всех входных потоков,
 // затем преобразует их в одно значение с помощью функции проекции и выдает результат.
 // at the exit: -- [A, 0] -- [B, 1] -- [C, 2] -- [D, 3] --|-->
 
 // В RxJS 6 существует только как статическая функция.
-// rxjs.zip(A, b).subscribe(x => console.log(x));
+//  rxjs.zip(A, b).subscribe(x => console.log(x));
 // rxjs.zip([A, b]).subscribe(x => console.log(x)); // Новый тип аргументов
 
 // конвейерный оператор!
@@ -435,18 +449,18 @@ const dictionary = {
 // A.pipe(rxjs.operators.withLatestFrom(b)).subscribe(x => console.log(x));
 
 // -------------------------------------------------------------------------------------
-// все операторы, которые объединяют значения путем спаривания (combineLatest, zip, forkJoin,  withLatestFrom),
-// принимают дополнительную функцию проекции. Эта функция определяет преобразование для результирующего значения.
-// Используя эту функцию, можно выбрать выдачу значения из определенной входной последовательности
-// или объединение значений любым способом.
+// все операторы, которые объединяют значения путем спаривания (combineLatest, zip, forkJoin,
+//  withLatestFrom), принимают дополнительную функцию проекции. Эта функция определяет преобразование
+//  для результирующего значения. Используя эту функцию, можно выбрать выдачу значения из определенной
+// входной последовательности или объединение значений любым способом.
 
 // возвращаем значение из второй последовательности 
 // rxjs.zip(A, b, (A, b) => b).subscribe(x => console.log(x));
 
 // объединяем значения, используя тире в качестве 
-// rxjs.zip(A, b, (A, b) => ` ${a} - ${b}`).subscribe(x => console.log(x));
+// rxjs.zip(A, b, (A, b) => ` ${A} - ${b}`).subscribe(x => console.log(x));
 
 // возвращаем один логический результат 
-// rxjs.zip(A, b, (A, b) => b && a).subscribe(x => console.log(x));
+// rxjs.zip(A, b, (A, b) => b && A).subscribe(x => console.log(x));
 
 // -------------------------------------------------------------------------------
