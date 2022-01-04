@@ -1,0 +1,17 @@
+{
+  "name": "rx.js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "rxjs": "^7.4.0"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
